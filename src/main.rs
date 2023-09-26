@@ -4,19 +4,17 @@ mod writer;
 mod attribute;
 mod visibility;
 
-mod getter_setter;
 mod constructor;
+mod getter_setter;
 
-mod to_string;
 mod equals;
+mod to_string;
 
 mod comment;
 
 use std::env;
 
-
 fn main() {
-
 	let args: Vec<String> = env::args().collect();
 
 	if args.len() != 2 {

@@ -6,13 +6,12 @@ use crate::attribute::Attribute;
 use crate::visibility::Visibility;
 
 pub struct Getter {
-	pub function : String,
-	pub attribute : Attribute,
-	pub class_name : String,
+	pub function: String,
+	pub attribute: Attribute,
+	pub class_name: String,
 }
 
-pub fn create_getter(att : &Attribute, class_name : &String) -> Getter {
-
+pub fn create_getter(att: &Attribute, class_name: &String) -> Getter {
 	let mut function = String::new();
 
 	//visibility of the function
@@ -21,11 +20,11 @@ pub fn create_getter(att : &Attribute, class_name : &String) -> Getter {
 
 	//on vérifie si l'attribut est static
 	let indentifier = if att.is_static() {
-			function.push_str("static ");
-			"this"
-		} else {
-			class_name
-		};
+		function.push_str("static ");
+		"this"
+	} else {
+		class_name
+	};
 
 	//return type of the function
 	function.push_str(&att.var_type);
@@ -58,7 +57,7 @@ pub fn create_getter(att : &Attribute, class_name : &String) -> Getter {
 
 	return Getter {
 		function,
-		attribute : att.clone(),
-		class_name : class_name.clone(),
+		attribute: att.clone(),
+		class_name: class_name.clone(),
 	};
 }

@@ -1,11 +1,9 @@
 #![allow(clippy::needless_return)]
 
-use crate::visibility::Visibility;
 use crate::parser::Command;
+use crate::visibility::Visibility;
 
-
-pub fn create_constructor(command : &Command) -> String {
-
+pub fn create_constructor(command: &Command) -> String {
 	let mut constructor = String::new();
 
 	//visibility of the constructor

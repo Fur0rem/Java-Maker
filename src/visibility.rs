@@ -3,7 +3,8 @@ use thiserror::Error;
 
 #[derive(Debug, Default, Clone)]
 pub enum Visibility {
-	#[default] Private,
+	#[default]
+	Private,
 	Protected,
 	Package,
 	Public,
@@ -20,7 +21,7 @@ impl ToString for Visibility {
 	}
 }
 
-#[derive(Error,Debug)]
+#[derive(Error, Debug)]
 #[error("Unknown visibility, doesn't match public, private, protected or package")]
 pub struct UnknownVisibilityError;
 
@@ -33,7 +34,7 @@ impl FromStr for Visibility {
 			"private" => Ok(Visibility::Private),
 			"protected" => Ok(Visibility::Protected),
 			"package" | "_" => Ok(Visibility::Package),
-			_ => Err(UnknownVisibilityError)
+			_ => Err(UnknownVisibilityError),
 		}
 	}
 }

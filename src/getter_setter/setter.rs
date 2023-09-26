@@ -5,23 +5,22 @@ use crate::attribute::Attribute;
 use crate::visibility::Visibility;
 
 pub struct Setter {
-	pub function : String,
-	pub attribute : Attribute,
-	pub class_name : String,
+	pub function: String,
+	pub attribute: Attribute,
+	pub class_name: String,
 }
 
-pub fn create_setter(att : &Attribute, class_name : &String) -> Setter {
-
+pub fn create_setter(att: &Attribute, class_name: &String) -> Setter {
 	let mut function = String::new();
 
 	//on vérifie si l'attribut est final
 	if att.is_final() {
- 		return Setter {
- 			function,
- 			attribute : att.clone(),
- 			class_name : class_name.clone(),
- 		};
- 	}
+		return Setter {
+			function,
+			attribute: att.clone(),
+			class_name: class_name.clone(),
+		};
+	}
 
 	//visibility of the function
 	function.push_str(&Visibility::Public.to_string());
@@ -29,11 +28,11 @@ pub fn create_setter(att : &Attribute, class_name : &String) -> Setter {
 
 	//on vérifie si l'attribut est static
 	let indentifier = if att.is_static() {
-			function.push_str("static ");
-			"this"
-		} else {
-			class_name
-		};
+		function.push_str("static ");
+		"this"
+	} else {
+		class_name
+	};
 
 	//return type of the function
 	function.push_str("void");
@@ -71,7 +70,7 @@ pub fn create_setter(att : &Attribute, class_name : &String) -> Setter {
 
 	return Setter {
 		function,
-		attribute : att.clone(),
-		class_name : class_name.clone(),
+		attribute: att.clone(),
+		class_name: class_name.clone(),
 	};
 }
