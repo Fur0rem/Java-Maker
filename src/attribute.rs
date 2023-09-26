@@ -78,7 +78,7 @@ impl Attribute {
 			imports.push(format!("java.util.{}", type_str));
 		}
 
-		imports
+		return imports;
 	}
 }
 
