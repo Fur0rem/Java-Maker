@@ -15,10 +15,7 @@ pub struct Attribute {
 
 impl Attribute {
 	pub fn new(
-		var_name: &str,
-		var_type: &str,
-		visibility: Visibility,
-		extra_info: Option<Vec<String>>,
+		var_name: &str, var_type: &str, visibility: Visibility, extra_info: Option<Vec<String>>,
 	) -> Attribute {
 		Attribute {
 			var_name: var_name.to_string(),
