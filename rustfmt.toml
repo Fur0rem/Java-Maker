@@ -1,2 +1,4 @@
 hard_tabs = true
 fn_params_layout = "compressed"
+unstable_features = true
+control_brace_style = "ClosingNextLine"

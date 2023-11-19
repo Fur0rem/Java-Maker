@@ -1,0 +1,18 @@
+A CLI tool to create a base template for java classes.
+
+Usage:
+
+```
+cargo run "ClassName { $(varName : varType @visibility (modifier1 | modifier2);)* } --optional-flags" target_dir
+```
+
+/!\ The double quotes are important /!\
+
+Example: cargo run "Person { name : String @public (final); age : int @private = 0; height : float @protected = 1.5f } --getters --docs" target/
+
+Available flags:
+
+```
+--getters: generate getters for all fields
+--docs: generate documentation for all fields (Not done yet)
+```
