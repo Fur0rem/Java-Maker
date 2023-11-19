@@ -1,4 +1,3 @@
-#![allow(clippy::needless_return)]
 #![allow(dead_code)]
 
 use crate::tokens::{

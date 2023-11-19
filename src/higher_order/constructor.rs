@@ -1,5 +1,3 @@
-#![allow(clippy::needless_return)]
-
 use crate::tokens::traits::{Declaration, Documentable};
 
 use crate::tokens::expr_type::ExprType;

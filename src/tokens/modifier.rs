@@ -1,5 +1,4 @@
 #![allow(dead_code)]
-#![allow(clippy::needless_return)]
 
 use crate::tokens::visibility::Visibility;
 
