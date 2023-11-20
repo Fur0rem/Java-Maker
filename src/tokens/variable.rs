@@ -1,7 +1,7 @@
 use crate::tokens::expr_type::ExprType;
 use crate::tokens::modifier::Modifier;
 
-use super::traits::{Declaration, Documentable};
+use super::declaration::Declaration;
 
 use std::fmt::{self, Display, Formatter};
 
@@ -27,9 +27,6 @@ impl Variable {
 		return &self.init;
 	}
 }
-
-// TODO
-impl Documentable for Variable {}
 
 impl Declaration for Variable {
 	fn modifier(&self) -> Modifier {

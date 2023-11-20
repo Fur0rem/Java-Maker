@@ -1,8 +1,5 @@
 use crate::tokens::{
-	modifier::Modifier,
-	traits::{Declaration, Documentable},
-	variable::Variable,
-	visibility::Visibility,
+	declaration::Declaration, modifier::Modifier, variable::Variable, visibility::Visibility,
 };
 
 pub struct Class {
@@ -33,9 +30,6 @@ impl Class {
 		&self.attributes
 	}
 }
-
-// TODO
-impl Documentable for Class {}
 
 impl Declaration for Class {
 	fn modifier(&self) -> Modifier {

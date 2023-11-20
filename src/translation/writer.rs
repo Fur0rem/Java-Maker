@@ -1,11 +1,12 @@
 #![allow(dead_code)]
 
+use std::collections::HashSet;
 use std::io::prelude::*;
 
 use crate::higher_order::class::Class;
 use crate::higher_order::constructor::Constructor;
 use crate::higher_order::getter_setter::getter::Getter;
-use crate::tokens::traits::{Declaration, Documentable};
+use crate::tokens::declaration::Declaration;
 use crate::tokens::visibility::Visibility;
 use crate::translation::parser::Command;
 
@@ -20,22 +21,38 @@ fn push_comment(command: &Command, content: &mut String, comment: &str) {
 fn create_content(command: &Command) -> String {
 	let mut content = String::new();
 
-	//TODO : get all the needed imports
-	/*let imports: HashSet<&str> = HashSet::new();
-
-	//add the imports to the content
-	for imp in imports {
-		content.push_str("import ");
-		content.push_str(imp);
-		content.push_str(";\n");
-	}
-	content.push('\n');*/
-
 	let class = Class::new(
 		Visibility::Public,
 		&command.class_name,
 		command.attributes.clone(),
 	);
+
+	let mut declarations: Vec<Box<dyn Declaration>> = Vec::new();
+	for var in class.attributes() {
+		declarations.push(Box::new(var.clone()));
+	}
+	declarations.push(Box::new(Constructor::new(&class)));
+
+	// getters
+	if command.getters() {
+		for var in class.attributes() {
+			declarations.push(Box::new(Getter::new(&var)));
+		}
+	}
+
+	let mut imports: HashSet<String> = HashSet::new();
+	for c in &declarations {
+		for imp in c.needed_imports() {
+			imports.insert(imp);
+		}
+	}
+	//add the imports to the content
+	for imp in imports {
+		content.push_str("import ");
+		content.push_str(&imp);
+		content.push_str(";\n");
+	}
+	content.push('\n');
 
 	push_comment(command, &mut content, &class.document());
 	content.push_str(&class.modifier().to_string());
@@ -44,21 +61,7 @@ fn create_content(command: &Command) -> String {
 	content.push_str(&class.begin().unwrap());
 	content.push('\n');
 
-	let mut contents: Vec<Box<dyn Declaration>> = Vec::new();
-	for var in class.attributes() {
-		contents.push(Box::new(var.clone()));
-	}
-
-	contents.push(Box::new(Constructor::new(&class)));
-
-	// getters
-	if command.getters() {
-		for var in class.attributes() {
-			contents.push(Box::new(Getter::new(var.clone())));
-		}
-	}
-
-	for c in contents {
+	for c in declarations {
 		push_comment(command, &mut content, &c.document());
 		if let Some(decorator) = c.decorator() {
 			content.push_str(format!("@{}\n", decorator).as_str());

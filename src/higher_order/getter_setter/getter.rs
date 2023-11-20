@@ -1,25 +1,22 @@
 #![allow(dead_code)]
 
+use crate::tokens::declaration::Declaration;
 use crate::tokens::expr_type::ExprType;
 use crate::tokens::modifier::Modifier;
-use crate::tokens::traits::{Declaration, Documentable};
 use crate::tokens::variable::Variable;
 use crate::tokens::visibility::Visibility;
 
-pub struct Getter {
-	var: Variable,
+pub struct Getter<'a> {
+	var: &'a Variable,
 }
 
-impl Getter {
-	pub fn new(var: Variable) -> Self {
+impl<'a> Getter<'a> {
+	pub fn new(var: &'a Variable) -> Self {
 		Self { var }
 	}
 }
 
-// TODO
-impl Documentable for Getter {}
-
-impl Declaration for Getter {
+impl Declaration for Getter<'_> {
 	fn modifier(&self) -> Modifier {
 		return Modifier::from_keywords(Visibility::Public, self.var.modifier().keywords().clone());
 	}

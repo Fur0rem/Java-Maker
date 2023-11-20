@@ -1,4 +1,4 @@
-use crate::tokens::traits::{Declaration, Documentable};
+use crate::tokens::declaration::Declaration;
 
 use crate::tokens::expr_type::ExprType;
 use crate::tokens::modifier::Modifier;
@@ -16,9 +16,6 @@ impl<'a> Constructor<'a> {
 		Self { class }
 	}
 }
-
-// TODO
-impl Documentable for Constructor<'_> {}
 
 impl Declaration for Constructor<'_> {
 	fn modifier(&self) -> Modifier {

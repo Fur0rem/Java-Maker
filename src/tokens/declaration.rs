@@ -3,13 +3,7 @@ use crate::tokens::modifier::Modifier;
 
 use super::visibility::Visibility;
 
-pub trait Documentable {
-	fn document(&self) -> String {
-		String::from("TODO : documentation")
-	}
-}
-
-pub trait Declaration: Documentable {
+pub trait Declaration {
 	fn decorator(&self) -> Option<String> {
 		None
 	}
@@ -40,6 +34,10 @@ pub trait Declaration: Documentable {
 
 	fn end(&self) -> Option<String> {
 		None
+	}
+
+	fn document(&self) -> String {
+		String::from("TODO : documentation")
 	}
 
 	fn needed_imports(&self) -> Vec<String> {
