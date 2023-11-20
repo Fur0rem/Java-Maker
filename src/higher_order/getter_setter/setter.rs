@@ -1,3 +1,5 @@
+use std::borrow::Cow;
+
 use crate::tokens::declaration::Declaration;
 use crate::tokens::expr_type::ExprType;
 use crate::tokens::modifier::Modifier;
@@ -23,14 +25,14 @@ impl Declaration for Setter<'_> {
 		return Modifier::from_keywords(Visibility::Public, self.var.modifier().keywords().clone());
 	}
 
-	fn name(&self) -> Option<String> {
-		return Some(format!(
+	fn name(&self) -> Option<Cow<str>> {
+		return Some(Cow::Owned(format!(
 			"set{}",
 			self.var.name().unwrap()[0..1].to_uppercase() + &self.var.name().unwrap()[1..]
-		));
+		)));
 	}
 
-	fn parameters(&self) -> Option<Vec<(ExprType, String)>> {
+	fn parameters(&self) -> Option<Vec<(ExprType, Cow<str>)>> {
 		return Some(vec![(
 			self.var.expr_type().unwrap(),
 			self.var.name().unwrap(),
@@ -41,22 +43,21 @@ impl Declaration for Setter<'_> {
 		return Some(ExprType::void());
 	}
 
-	fn body(&self) -> (Option<String>, bool) {
-		return (
-			Some(format!(
-				"this.{} = {};",
-				self.var.name().unwrap(),
-				self.var.name().unwrap()
-			)),
-			true,
-		);
+	fn body(&self) -> (Option<Cow<str>>, bool) {
+		let mut body = String::new();
+		body.push_str(&format!(
+			"this.{} = {};\n",
+			self.var.name().unwrap(),
+			self.var.name().unwrap()
+		));
+		return (Some(Cow::Owned(body)), true);
 	}
 
-	fn begin(&self) -> Option<String> {
-		return Some(String::from("{"));
+	fn begin(&self) -> Option<Cow<str>> {
+		return Some(Cow::Borrowed("{"));
 	}
 
-	fn end(&self) -> Option<String> {
-		return Some(String::from("}"));
+	fn end(&self) -> Option<Cow<str>> {
+		return Some(Cow::Borrowed("}"));
 	}
 }

@@ -1,3 +1,5 @@
+use std::borrow::Cow;
+
 use crate::tokens::{
 	declaration::Declaration, modifier::Modifier, variable::Variable, visibility::Visibility,
 };
@@ -36,15 +38,15 @@ impl Declaration for Class {
 		return self.modifier.clone();
 	}
 
-	fn name(&self) -> Option<String> {
-		return Some(self.name.clone());
+	fn name(&self) -> Option<Cow<str>> {
+		return Some(Cow::Borrowed(&self.name));
 	}
 
-	fn begin(&self) -> Option<String> {
-		return Some(String::from("{"));
+	fn begin(&self) -> Option<Cow<str>> {
+		return Some(Cow::Borrowed("{"));
 	}
 
-	fn end(&self) -> Option<String> {
-		return Some(String::from("}"));
+	fn end(&self) -> Option<Cow<str>> {
+		return Some(Cow::Borrowed("}"));
 	}
 }

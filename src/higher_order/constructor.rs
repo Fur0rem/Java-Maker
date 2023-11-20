@@ -1,3 +1,5 @@
+use std::borrow::Cow;
+
 use crate::tokens::declaration::Declaration;
 
 use crate::tokens::expr_type::ExprType;
@@ -22,12 +24,12 @@ impl Declaration for Constructor<'_> {
 		return Modifier::new(Visibility::Public, Vec::new());
 	}
 
-	fn name(&self) -> Option<String> {
-		return Some(self.class.name().clone());
+	fn name(&self) -> Option<Cow<str>> {
+		return Some(Cow::Borrowed(&self.class.name));
 	}
 
-	fn parameters(&self) -> Option<Vec<(ExprType, String)>> {
-		let mut parameters: Vec<(ExprType, String)> = Vec::new();
+	fn parameters(&self) -> Option<Vec<(ExprType, Cow<str>)>> {
+		let mut parameters = Vec::new();
 
 		for var in self.class.attributes() {
 			if var.init().is_some() || var.modifier().is_static() || var.init().is_some() {
@@ -39,7 +41,7 @@ impl Declaration for Constructor<'_> {
 		return Some(parameters);
 	}
 
-	fn body(&self) -> (Option<String>, bool) {
+	fn body(&self) -> (Option<Cow<str>>, bool) {
 		let mut body = String::new();
 		body.push_str("super();\n");
 
@@ -55,14 +57,14 @@ impl Declaration for Constructor<'_> {
 			));
 		}
 		body.pop();
-		return (Some(body), true);
+		return (Some(Cow::Owned(body)), true);
 	}
 
-	fn begin(&self) -> Option<String> {
-		return Some(String::from("{"));
+	fn begin(&self) -> Option<Cow<str>> {
+		return Some(Cow::Borrowed("{"));
 	}
 
-	fn end(&self) -> Option<String> {
-		return Some(String::from("}"));
+	fn end(&self) -> Option<Cow<str>> {
+		return Some(Cow::Borrowed("}"));
 	}
 }

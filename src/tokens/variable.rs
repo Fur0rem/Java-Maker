@@ -3,7 +3,10 @@ use crate::tokens::modifier::Modifier;
 
 use super::declaration::Declaration;
 
-use std::fmt::{self, Display, Formatter};
+use std::{
+	borrow::Cow,
+	fmt::{self, Display, Formatter},
+};
 
 #[derive(Debug, Clone)]
 pub struct Variable {
@@ -33,23 +36,26 @@ impl Declaration for Variable {
 		return self.modifier.clone();
 	}
 
-	fn name(&self) -> Option<String> {
-		return Some(self.name.to_string());
+	fn name(&self) -> Option<Cow<str>> {
+		return Some(Cow::Borrowed(&self.name));
 	}
 
 	fn expr_type(&self) -> Option<ExprType> {
 		return Some(self.expr_type.clone());
 	}
 
-	fn body(&self) -> (Option<String>, bool) {
+	fn body(&self) -> (Option<Cow<str>>, bool) {
 		if self.init.is_some() {
-			return (Some(format!(" = {}", self.init.as_ref().unwrap())), false);
+			return (
+				Some(Cow::Owned(format!(" = {}", self.init.as_ref().unwrap()))),
+				true,
+			);
 		}
 		return (None, false);
 	}
 
-	fn end(&self) -> Option<String> {
-		return Some(String::from(";"));
+	fn end(&self) -> Option<Cow<str>> {
+		return Some(Cow::Borrowed(";"));
 	}
 }
 

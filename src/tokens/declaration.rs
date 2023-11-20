@@ -1,10 +1,12 @@
+use std::borrow::Cow;
+
 use crate::tokens::expr_type::ExprType;
 use crate::tokens::modifier::Modifier;
 
 use super::visibility::Visibility;
 
 pub trait Declaration {
-	fn decorator(&self) -> Option<String> {
+	fn decorator(&self) -> Option<Cow<str>> {
 		None
 	}
 
@@ -12,11 +14,11 @@ pub trait Declaration {
 		Modifier::new(Visibility::default(), Vec::new())
 	}
 
-	fn name(&self) -> Option<String> {
+	fn name(&self) -> Option<Cow<str>> {
 		None
 	}
 
-	fn parameters(&self) -> Option<Vec<(ExprType, String)>> {
+	fn parameters(&self) -> Option<Vec<(ExprType, Cow<str>)>> {
 		None
 	}
 
@@ -24,20 +26,20 @@ pub trait Declaration {
 		None
 	}
 
-	fn body(&self) -> (Option<String>, bool) {
+	fn body(&self) -> (Option<Cow<str>>, bool) {
 		(None, false)
 	}
 
-	fn begin(&self) -> Option<String> {
+	fn begin(&self) -> Option<Cow<str>> {
 		None
 	}
 
-	fn end(&self) -> Option<String> {
+	fn end(&self) -> Option<Cow<str>> {
 		None
 	}
 
-	fn document(&self) -> String {
-		String::from("TODO : documentation")
+	fn document(&self) -> Cow<str> {
+		Cow::Borrowed("TODO : documentation")
 	}
 
 	fn needed_imports(&self) -> Vec<String> {
