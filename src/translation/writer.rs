@@ -34,14 +34,14 @@ fn create_content(command: &Command) -> String {
 
 	if command.getters() {
 		for var in class.attributes() {
-			declarations.push(Box::new(Getter::new(&var)));
+			declarations.push(Box::new(Getter::new(var)));
 		}
 	}
 
 	if command.setters() {
 		for var in class.attributes() {
-			if Setter::can_be_set(&var) {
-				declarations.push(Box::new(Setter::new(&var)));
+			if Setter::can_be_set(var) {
+				declarations.push(Box::new(Setter::new(var)));
 			}
 		}
 	}

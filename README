@@ -8,7 +8,7 @@ cargo run "ClassName { $(varName : varType @visibility (modifier1 | modifier2);)
 
 /!\ The double quotes are important /!\
 
-Example: cargo run "Person { name : String @public (final); age : int @private; height : float @protected = 1.5f } --getters --docs" target/
+Example: cargo run "Person { name : ArrayList<String> @public (final); age : int @private; height : float @protected = 1.5f } --getters --docs" target/
 
 Available flags:
 

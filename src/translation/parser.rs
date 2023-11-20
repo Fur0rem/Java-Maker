@@ -91,8 +91,6 @@ fn parse_attributes(attributes: &str) -> Result<Vec<Variable>, JavaMakerError> {
 			.trim()
 			.to_string();
 
-		dbg!(&name);
-
 		// Find the type : first non-alphanumeric character or '_' or '<' or '>' or '[' or ']' or ',' after the :
 		const TYPE_CHARS: [char; 6] = ['<', '>', '[', ']', ',', '_'];
 		let double_point_index = att.find(':');
