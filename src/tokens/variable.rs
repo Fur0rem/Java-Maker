@@ -45,13 +45,10 @@ impl Declaration for Variable {
 	}
 
 	fn body(&self) -> (Option<Cow<str>>, bool) {
-		if self.init.is_some() {
-			return (
-				Some(Cow::Owned(format!(" = {}", self.init.as_ref().unwrap()))),
-				true,
-			);
-		}
-		return (None, false);
+		return (
+			self.init.as_ref().map(|s| Cow::Owned(format!(" = {}", s))),
+			false,
+		);
 	}
 
 	fn end(&self) -> Option<Cow<str>> {

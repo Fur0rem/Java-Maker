@@ -6,6 +6,9 @@ use crate::tokens::modifier::Modifier;
 use crate::tokens::variable::Variable;
 use crate::tokens::visibility::Visibility;
 
+extern crate java_maker_macros;
+use java_maker_macros::curly_braces_codeblock;
+
 pub struct Setter<'a> {
 	var: &'a Variable,
 }
@@ -50,14 +53,9 @@ impl Declaration for Setter<'_> {
 			self.var.name().unwrap(),
 			self.var.name().unwrap()
 		));
+		body.pop();
 		return (Some(Cow::Owned(body)), true);
 	}
 
-	fn begin(&self) -> Option<Cow<str>> {
-		return Some(Cow::Borrowed("{"));
-	}
-
-	fn end(&self) -> Option<Cow<str>> {
-		return Some(Cow::Borrowed("}"));
-	}
+	curly_braces_codeblock!();
 }

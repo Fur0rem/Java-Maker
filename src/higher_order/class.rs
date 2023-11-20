@@ -4,6 +4,9 @@ use crate::tokens::{
 	declaration::Declaration, modifier::Modifier, variable::Variable, visibility::Visibility,
 };
 
+extern crate java_maker_macros;
+use java_maker_macros::curly_braces_codeblock;
+
 pub struct Class {
 	pub modifier: Modifier,
 	pub name: String,
@@ -20,14 +23,6 @@ impl Class {
 		}
 	}
 
-	pub fn modifier(&self) -> &Modifier {
-		&self.modifier
-	}
-
-	pub fn name(&self) -> &String {
-		&self.name
-	}
-
 	pub fn attributes(&self) -> &Vec<Variable> {
 		&self.attributes
 	}
@@ -42,11 +37,5 @@ impl Declaration for Class {
 		return Some(Cow::Borrowed(&self.name));
 	}
 
-	fn begin(&self) -> Option<Cow<str>> {
-		return Some(Cow::Borrowed("{"));
-	}
-
-	fn end(&self) -> Option<Cow<str>> {
-		return Some(Cow::Borrowed("}"));
-	}
+	curly_braces_codeblock!();
 }

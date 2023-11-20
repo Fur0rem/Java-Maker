@@ -8,6 +8,9 @@ use crate::tokens::visibility::Visibility;
 
 use super::class::Class;
 
+extern crate java_maker_macros;
+use java_maker_macros::curly_braces_codeblock;
+
 /// Represents the constructor of a class
 pub struct Constructor<'a> {
 	class: &'a Class,
@@ -60,11 +63,5 @@ impl Declaration for Constructor<'_> {
 		return (Some(Cow::Owned(body)), true);
 	}
 
-	fn begin(&self) -> Option<Cow<str>> {
-		return Some(Cow::Borrowed("{"));
-	}
-
-	fn end(&self) -> Option<Cow<str>> {
-		return Some(Cow::Borrowed("}"));
-	}
+	curly_braces_codeblock!();
 }

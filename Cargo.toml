@@ -9,6 +9,7 @@ edition = "2021"
 strum = "0.25.0"
 strum_macros = "0.25.3"
 thiserror = "1.0.*"
+java-maker_macros = { path = "java-maker_macros" }
 
 # clippy allow
 

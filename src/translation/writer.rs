@@ -62,7 +62,7 @@ fn create_content(command: &Command) -> String {
 
 	push_comment(command, &mut content, &class.document());
 	content.push_str(&class.modifier().to_string());
-	content.push_str(class.name());
+	content.push_str(&class.name().unwrap());
 	content.push(' ');
 	content.push_str(&class.begin().unwrap());
 	content.push('\n');
