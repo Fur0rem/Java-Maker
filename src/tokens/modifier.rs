@@ -3,7 +3,6 @@
 use crate::tokens::visibility::Visibility;
 
 use std::fmt::Display;
-//from str
 use std::str::FromStr;
 
 #[derive(Debug, Clone, PartialEq)]

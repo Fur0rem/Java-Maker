@@ -1,5 +1,3 @@
-#![allow(dead_code)]
-
 use crate::tokens::{
 	expr_type::ExprType,
 	modifier::Modifier,

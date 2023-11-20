@@ -4,42 +4,52 @@ use crate::tokens::modifier::Modifier;
 use crate::tokens::variable::Variable;
 use crate::tokens::visibility::Visibility;
 
-pub struct Getter<'a> {
+pub struct Setter<'a> {
 	var: &'a Variable,
 }
 
-impl<'a> Getter<'a> {
+impl<'a> Setter<'a> {
 	pub fn new(var: &'a Variable) -> Self {
 		Self { var }
 	}
+
+	pub fn can_be_set(var: &Variable) -> bool {
+		return !var.modifier().is_static() && !var.modifier().is_final();
+	}
 }
 
-impl Declaration for Getter<'_> {
+impl Declaration for Setter<'_> {
 	fn modifier(&self) -> Modifier {
 		return Modifier::from_keywords(Visibility::Public, self.var.modifier().keywords().clone());
 	}
 
 	fn name(&self) -> Option<String> {
 		return Some(format!(
-			"get{}",
+			"set{}",
 			self.var.name().unwrap()[0..1].to_uppercase() + &self.var.name().unwrap()[1..]
 		));
 	}
 
 	fn parameters(&self) -> Option<Vec<(ExprType, String)>> {
-		return Some(Vec::new());
+		return Some(vec![(
+			self.var.expr_type().unwrap(),
+			self.var.name().unwrap(),
+		)]);
 	}
 
 	fn expr_type(&self) -> Option<ExprType> {
-		return self.var.expr_type();
+		return Some(ExprType::void());
 	}
 
 	fn body(&self) -> (Option<String>, bool) {
-		let mut body = String::new();
-		body.push_str("return ");
-		body.push_str(&self.var.name().unwrap());
-		body.push(';');
-		return (Some(body), true);
+		return (
+			Some(format!(
+				"this.{} = {};",
+				self.var.name().unwrap(),
+				self.var.name().unwrap()
+			)),
+			true,
+		);
 	}
 
 	fn begin(&self) -> Option<String> {

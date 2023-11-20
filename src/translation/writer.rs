@@ -1,11 +1,10 @@
-#![allow(dead_code)]
-
 use std::collections::HashSet;
 use std::io::prelude::*;
 
 use crate::higher_order::class::Class;
 use crate::higher_order::constructor::Constructor;
 use crate::higher_order::getter_setter::getter::Getter;
+use crate::higher_order::getter_setter::setter::Setter;
 use crate::tokens::declaration::Declaration;
 use crate::tokens::visibility::Visibility;
 use crate::translation::parser::Command;
@@ -33,10 +32,17 @@ fn create_content(command: &Command) -> String {
 	}
 	declarations.push(Box::new(Constructor::new(&class)));
 
-	// getters
 	if command.getters() {
 		for var in class.attributes() {
 			declarations.push(Box::new(Getter::new(&var)));
+		}
+	}
+
+	if command.setters() {
+		for var in class.attributes() {
+			if Setter::can_be_set(&var) {
+				declarations.push(Box::new(Setter::new(&var)));
+			}
 		}
 	}
 

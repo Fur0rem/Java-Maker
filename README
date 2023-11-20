@@ -8,11 +8,12 @@ cargo run "ClassName { $(varName : varType @visibility (modifier1 | modifier2);)
 
 /!\ The double quotes are important /!\
 
-Example: cargo run "Person { name : String @public (final); age : int @private = 0; height : float @protected = 1.5f } --getters --docs" target/
+Example: cargo run "Person { name : String @public (final); age : int @private; height : float @protected = 1.5f } --getters --docs" target/
 
 Available flags:
 
 ```
 --getters: generate getters for all fields
+--setters: generate getters for all fields that can be modified (Not static, nor final)
 --docs: generate documentation for all fields (Not done yet)
 ```
