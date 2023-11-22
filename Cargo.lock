@@ -18,7 +18,7 @@ dependencies = [
 
 [[package]]
 name = "java_maker"
-version = "0.2.0"
+version = "0.2.1"
 dependencies = [
  "java-maker_macros",
  "strum",
