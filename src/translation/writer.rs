@@ -46,6 +46,12 @@ fn create_content(command: &Command) -> String {
 		}
 	}
 
+	if command.to_string() {
+		declarations.push(Box::new(crate::higher_order::to_string::ToString::new(
+			&class,
+		)));
+	}
+
 	let mut imports: HashSet<String> = HashSet::new();
 	for c in &declarations {
 		for imp in c.needed_imports() {

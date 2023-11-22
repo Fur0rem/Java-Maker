@@ -1,20 +1,13 @@
 use crate::tokens::{
-	expr_type::ExprType,
-	modifier::Modifier,
-	traits::{Commentable, Declaration},
-	visibility::Visibility,
+	declaration::Declaration, expr_type::ExprType, modifier::Modifier, visibility::Visibility,
 };
 
 use super::class::Class;
+use java_maker_macros::curly_braces_codeblock;
+use std::borrow::Cow;
 
 pub struct ToString<'a> {
 	class: &'a Class,
-}
-
-impl<'a> Commentable for ToString<'a> {
-	fn comment(&self) -> String {
-		return String::new();
-	}
 }
 
 impl<'a> ToString<'a> {
@@ -28,11 +21,11 @@ impl<'a> Declaration for ToString<'a> {
 		return Modifier::new(Visibility::Public, Vec::new());
 	}
 
-	fn name(&self) -> Option<String> {
-		return Some("toString".to_string());
+	fn name(&self) -> Option<Cow<str>> {
+		return Some(Cow::Borrowed("toString"));
 	}
 
-	fn parameters(&self) -> Option<Vec<(ExprType, String)>> {
+	fn parameters(&self) -> Option<Vec<(ExprType, Cow<str>)>> {
 		return Some(Vec::new());
 	}
 
@@ -40,31 +33,31 @@ impl<'a> Declaration for ToString<'a> {
 		return Some(ExprType::new("String"));
 	}
 
-	fn body(&self) -> (Option<String>, bool) {
+	fn body(&self) -> (Option<Cow<str>>, bool) {
 		let mut function = String::new();
 		function.push_str("StringBuilder sb = new StringBuilder();\n");
 		function.push_str("sb.append(\"");
-		function.push_str(self.class.name());
+		function.push_str(&self.class.name().unwrap());
 		function.push_str("(\");\n");
-		for var in self.class.attributes() {
-			function.push_str(&format!("sb.append(\"{}=\");\n", &var.name()));
-			function.push_str(&format!("sb.append({});\n", &var.name()));
-			function.push_str("sb.append(\",\");\n");
+		let nb_attributes = self.class.attributes().len();
+		for (i, var) in self.class.attributes().iter().enumerate() {
+			function.push_str(&format!("sb.append(\"{}=\");\n", &var.name().unwrap()));
+			function.push_str(&format!("sb.append(this.{});\n", var.name().unwrap()));
+			// if not the last
+			// I used enumerate because else I would need to derive PartialEq for Variable
+			// and every other field inside the struct
+			if i != nb_attributes - 1 {
+				function.push_str("sb.append(\", \");\n");
+			}
 		}
 		function.push_str("sb.append(\")\");\n");
 		function.push_str("return sb.toString();");
-		return (Some(function), true);
+		return (Some(Cow::Owned(function)), true);
 	}
 
-	fn begin(&self) -> Option<String> {
-		return Some(String::from("{"));
-	}
+	curly_braces_codeblock!();
 
-	fn end(&self) -> Option<String> {
-		return Some(String::from("}"));
-	}
-
-	fn decorator(&self) -> Option<String> {
-		return Some(String::from("Override"));
+	fn decorator(&self) -> Option<Cow<str>> {
+		return Some(Cow::Borrowed("Override"));
 	}
 }
