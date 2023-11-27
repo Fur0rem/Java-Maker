@@ -39,7 +39,7 @@ pub trait Declaration {
 	}
 
 	fn document(&self) -> Cow<str> {
-		Cow::Borrowed("TODO : documentation")
+		Cow::Owned(format!("TODO : documentation for {}", self.name().unwrap()))
 	}
 
 	fn needed_imports(&self) -> Vec<String> {

@@ -7,7 +7,7 @@ use crate::tokens::variable::Variable;
 use crate::tokens::visibility::Visibility;
 
 extern crate java_maker_macros;
-use java_maker_macros::curly_braces_codeblock;
+use java_maker_macros::function;
 
 pub struct Getter<'a> {
 	var: &'a Variable,
@@ -25,10 +25,6 @@ impl Declaration for Getter<'_> {
 	}
 
 	fn name(&self) -> Option<Cow<str>> {
-		/*return Some(format!(
-			"get{}",
-			self.var.name().unwrap()[0..1].to_uppercase() + &self.var.name().unwrap()[1..]
-		));*/
 		return Some(Cow::Owned(format!(
 			"get{}",
 			self.var.name().unwrap()[0..1].to_uppercase() + &self.var.name().unwrap()[1..]
@@ -51,5 +47,5 @@ impl Declaration for Getter<'_> {
 		return (Some(Cow::Owned(body)), true);
 	}
 
-	curly_braces_codeblock!();
+	function!();
 }

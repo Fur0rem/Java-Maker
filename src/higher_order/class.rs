@@ -5,7 +5,7 @@ use crate::tokens::{
 };
 
 extern crate java_maker_macros;
-use java_maker_macros::curly_braces_codeblock;
+use java_maker_macros::function;
 
 pub struct Class {
 	pub modifier: Modifier,
@@ -37,5 +37,5 @@ impl Declaration for Class {
 		return Some(Cow::Borrowed(&self.name));
 	}
 
-	curly_braces_codeblock!();
+	function!();
 }

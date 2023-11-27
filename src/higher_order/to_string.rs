@@ -3,7 +3,7 @@ use crate::tokens::{
 };
 
 use super::class::Class;
-use java_maker_macros::curly_braces_codeblock;
+use java_maker_macros::function;
 use std::borrow::Cow;
 
 pub struct ToString<'a> {
@@ -55,7 +55,7 @@ impl<'a> Declaration for ToString<'a> {
 		return (Some(Cow::Owned(function)), true);
 	}
 
-	curly_braces_codeblock!();
+	function!();
 
 	fn decorator(&self) -> Option<Cow<str>> {
 		return Some(Cow::Borrowed("Override"));

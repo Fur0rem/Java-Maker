@@ -7,7 +7,7 @@ use crate::tokens::variable::Variable;
 use crate::tokens::visibility::Visibility;
 
 extern crate java_maker_macros;
-use java_maker_macros::curly_braces_codeblock;
+use java_maker_macros::function;
 
 pub struct Setter<'a> {
 	var: &'a Variable,
@@ -57,5 +57,5 @@ impl Declaration for Setter<'_> {
 		return (Some(Cow::Owned(body)), true);
 	}
 
-	curly_braces_codeblock!();
+	function!();
 }

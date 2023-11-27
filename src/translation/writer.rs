@@ -9,11 +9,15 @@ use crate::tokens::declaration::Declaration;
 use crate::tokens::visibility::Visibility;
 use crate::translation::parser::Command;
 
-fn push_comment(command: &Command, content: &mut String, comment: &str) {
+fn push_document(command: &Command, content: &mut String, document: &str) {
 	if command.options.documentation {
-		content.push_str("/*");
-		content.push_str(comment);
-		content.push_str("*/\n");
+		content.push_str("/**\n");
+		for line in document.split('\n') {
+			content.push_str(" * ");
+			content.push_str(line);
+			content.push('\n');
+		}
+		content.push_str(" */\n");
 	}
 }
 
@@ -66,7 +70,7 @@ fn create_content(command: &Command) -> String {
 	}
 	content.push('\n');
 
-	push_comment(command, &mut content, &class.document());
+	push_document(command, &mut content, &class.document());
 	content.push_str(&class.modifier().to_string());
 	content.push_str(&class.name().unwrap());
 	content.push(' ');
@@ -74,7 +78,7 @@ fn create_content(command: &Command) -> String {
 	content.push('\n');
 
 	for c in declarations {
-		push_comment(command, &mut content, &c.document());
+		push_document(command, &mut content, &c.document());
 		if let Some(decorator) = c.decorator() {
 			content.push_str(format!("@{}\n", decorator).as_str());
 		}
