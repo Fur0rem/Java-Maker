@@ -1,3 +1,4 @@
+use convert_case::{Case, Casing};
 use std::borrow::Cow;
 
 use crate::tokens::declaration::Declaration;
@@ -27,7 +28,7 @@ impl Declaration for Getter<'_> {
 	fn name(&self) -> Option<Cow<str>> {
 		return Some(Cow::Owned(format!(
 			"get{}",
-			self.var.name().unwrap()[0..1].to_uppercase() + &self.var.name().unwrap()[1..]
+			self.var.name().unwrap().to_case(Case::Pascal)
 		)));
 	}
 

@@ -10,6 +10,9 @@ strum = "0.25.0"
 strum_macros = "0.25.3"
 thiserror = "1.0.*"
 java-maker_macros = { path = "java-maker_macros" }
+ucfirst = "0.1.0"
+convert_case = "0.6.0"
+inline_colorization = "0.1.6"
 
 # clippy allow
 

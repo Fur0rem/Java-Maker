@@ -1,13 +1,12 @@
 use std::collections::HashSet;
 use std::io::prelude::*;
 
-use crate::higher_order::class::Class;
-use crate::higher_order::constructor::Constructor;
-use crate::higher_order::getter_setter::getter::Getter;
-use crate::higher_order::getter_setter::setter::Setter;
+use crate::higher_order::getter_setter::{getter::Getter, setter::Setter};
+use crate::higher_order::{class::Class, constructor::Constructor};
+use crate::parser::Command;
 use crate::tokens::declaration::Declaration;
 use crate::tokens::visibility::Visibility;
-use crate::translation::parser::Command;
+use crate::translation::format::reformat_code;
 
 fn push_document(command: &Command, content: &mut String, document: &str) {
 	if command.options.documentation {
@@ -125,49 +124,6 @@ fn create_content(command: &Command) -> String {
 	content.push_str(&class.end().unwrap());
 
 	return content;
-}
-
-fn reformat_code(content: &mut String) {
-	//split at every \n
-	let lines: Vec<&str> = content.split('\n').collect();
-
-	//for each line, count how many more opening brackets than closing brackets there are
-	let mut lines_with_brackets: Vec<(String, isize)> = lines
-		.iter()
-		.map(|line| {
-			let mut count = 0;
-			for c in line.chars() {
-				if c == '{' {
-					count += 1;
-				} else if c == '}' {
-					count -= 1;
-				}
-			}
-			return (String::from(*line), count);
-		})
-		.collect();
-
-	//for each line, add the number of opening brackets to the previous line
-	for i in 1..lines_with_brackets.len() {
-		lines_with_brackets[i].1 += lines_with_brackets[i - 1].1;
-	}
-
-	//for each line, add enough tabs to the beginning of the line
-	for line in &mut lines_with_brackets {
-		let mut tabs = String::new();
-		let count = line.1 - line.0.contains('{') as isize;
-		for _ in 0..count {
-			tabs.push('\t');
-		}
-		line.0 = tabs + &line.0;
-	}
-
-	//recreate the content
-	content.clear();
-	for (line, _) in lines_with_brackets {
-		*content += &line;
-		*content += "\n";
-	}
 }
 
 //Creates the fully formatted java file

@@ -29,6 +29,10 @@ impl Variable {
 	pub fn init(&self) -> &Option<String> {
 		return &self.init;
 	}
+
+	pub fn update_name(&mut self, name: &str) {
+		self.name = name.to_string();
+	}
 }
 
 impl Declaration for Variable {

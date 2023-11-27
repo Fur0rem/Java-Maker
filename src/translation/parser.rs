@@ -1,5 +1,4 @@
-#![allow(dead_code)]
-
+use crate::translation::format::{case_fix, case_warning};
 use std::{
 	path::{Path, PathBuf},
 	str::FromStr,
@@ -19,6 +18,8 @@ pub struct Options {
 	pub to_string: bool,
 	pub equals: bool,
 	pub documentation: bool,
+	pub warnings: bool,
+	pub fix: bool,
 }
 
 #[derive(Debug)]
@@ -72,6 +73,8 @@ fn parse_options(options: String) -> Result<Options, JavaMakerError> {
 			"to_string" => options.to_string = true,
 			"equals" => options.equals = true,
 			"docs" => options.documentation = true,
+			"warnings" => options.warnings = true,
+			"fix" => options.fix = true,
 			_ => return Err(JavaMakerError::UnknownOption(o.to_string())),
 		}
 	}
@@ -158,14 +161,23 @@ pub fn parse_command(command: &str, path: &Path) -> Result<Command, JavaMakerErr
 	let attributes = parse_attributes(&attributes)?;
 	let options = parse_options(options)?;
 
-	return Ok(Command {
+	let mut command = Command {
 		class_name,
 		attributes,
 		options,
-		path: path.to_owned(),
-	});
+		path: path.to_path_buf(),
+	};
+	if command.warnings() {
+		case_warning(&command);
+	}
+	if command.fix() {
+		case_fix(&mut command);
+	}
+
+	return Ok(command);
 }
 
+#[allow(dead_code)]
 impl Command {
 	pub fn getters(&self) -> bool {
 		self.options.getters
@@ -185,5 +197,17 @@ impl Command {
 
 	pub fn equals(&self) -> bool {
 		self.options.equals
+	}
+
+	pub fn documentation(&self) -> bool {
+		self.options.documentation
+	}
+
+	pub fn warnings(&self) -> bool {
+		self.options.warnings
+	}
+
+	pub fn fix(&self) -> bool {
+		self.options.fix
 	}
 }
