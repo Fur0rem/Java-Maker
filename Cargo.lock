@@ -41,7 +41,6 @@ dependencies = [
  "strum",
  "strum_macros",
  "thiserror",
- "ucfirst",
 ]
 
 [[package]]
@@ -117,12 +116,6 @@ dependencies = [
  "quote",
  "syn",
 ]
-
-[[package]]
-name = "ucfirst"
-version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "041760a393fb84e6afb38938bf83ce962fad1d81416ac5c020c8960cb0d372e5"
 
 [[package]]
 name = "unicode-ident"

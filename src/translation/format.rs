@@ -1,5 +1,6 @@
 use crate::parser::Command;
 use crate::tokens::declaration::Declaration;
+use crate::tokens::expr_type::ExprType;
 use convert_case::{Case, Casing};
 use inline_colorization::{color_reset, color_yellow};
 
@@ -46,7 +47,7 @@ pub fn reformat_code(content: &mut String) {
 	}
 }
 
-pub fn case_warning(command: &Command) {
+pub fn warnings(command: &Command) {
 	if command.class_name.chars().next().unwrap().is_lowercase() {
 		println!(
 			"{color_yellow}Warning:{color_reset} class name {} should start with an uppercase letter",
@@ -61,12 +62,32 @@ pub fn case_warning(command: &Command) {
 				name
 			);
 		}
+		if let Some(expr_type) = var.expr_type() {
+			if expr_type == ExprType::boolean() {
+				if !name.starts_with("is") {
+					println!(
+						"{color_yellow}Warning:{color_reset} boolean variable name {} should start with \"is\"",
+						name
+					);
+				}
+			} else if name.starts_with("is") {
+				println!(
+					"{color_yellow}Warning:{color_reset} variable name {} should not start with \"is\"",
+					name
+				);
+			}
+		}
 	}
 }
 
-pub fn case_fix(command: &mut Command) {
+pub fn fix(command: &mut Command) {
 	command.class_name = command.class_name.to_case(Case::Pascal);
 	for var in &mut command.attributes {
+		if let Some(expr_type) = var.expr_type() {
+			if expr_type == ExprType::boolean() && !var.name().unwrap().starts_with("is") {
+				var.update_name(&format!("is{}", var.name().unwrap()));
+			}
+		}
 		var.update_name(&var.name().unwrap().to_string().to_case(Case::Camel));
 	}
 }

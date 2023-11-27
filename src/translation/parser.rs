@@ -1,4 +1,4 @@
-use crate::translation::format::{case_fix, case_warning};
+use crate::translation::format::{fix, warnings};
 use std::{
 	path::{Path, PathBuf},
 	str::FromStr,
@@ -168,10 +168,10 @@ pub fn parse_command(command: &str, path: &Path) -> Result<Command, JavaMakerErr
 		path: path.to_path_buf(),
 	};
 	if command.warnings() {
-		case_warning(&command);
+		warnings(&command);
 	}
 	if command.fix() {
-		case_fix(&mut command);
+		fix(&mut command);
 	}
 
 	return Ok(command);
