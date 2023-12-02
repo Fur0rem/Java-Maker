@@ -27,6 +27,7 @@ checksum = "dc1804bdb6a9784758b200007273a8b84e2b0b0b97a8f1e18e763eceb3e9f98a"
 name = "java-maker_macros"
 version = "0.1.0"
 dependencies = [
+ "convert_case",
  "quote",
  "syn",
 ]

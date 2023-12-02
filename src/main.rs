@@ -10,9 +10,6 @@ use std::path::Path;
 
 use thiserror::Error;
 
-//format de la commande : java_maker nomClasse { nomAttribut : typeAttribut @Visibility (extra1 | extra2), ... } --options
-// example : cargo run "Person { name : String @public (final); age : int @private = 0; height : float @protected = 1.5f } --getters --docs"
-
 #[derive(Debug, Error)]
 pub enum JavaMakerError {
 	#[error("Wrong number of arguments : expected 2, got {0}")]

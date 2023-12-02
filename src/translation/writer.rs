@@ -9,7 +9,7 @@ use crate::tokens::visibility::Visibility;
 use crate::translation::format::reformat_code;
 
 fn push_document(command: &Command, content: &mut String, document: &str) {
-	if command.options.documentation {
+	if command.docs() {
 		content.push_str("/**\n");
 		for line in document.split('\n') {
 			content.push_str(" * ");

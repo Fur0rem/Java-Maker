@@ -1,32 +1,32 @@
 use crate::translation::format::{fix, warnings};
+use crate::{
+	tokens::{expr_type::ExprType, modifier::Modifier, variable::Variable, visibility::Visibility},
+	JavaMakerError,
+};
+use convert_case::{Case, Casing};
+use java_maker_macros::options;
 use std::{
 	path::{Path, PathBuf},
 	str::FromStr,
 };
 use strum::IntoEnumIterator;
+use strum_macros::{Display, EnumIter, EnumString};
 
-use crate::{
-	tokens::{expr_type::ExprType, modifier::Modifier, variable::Variable, visibility::Visibility},
-	JavaMakerError,
-};
-
-#[derive(Debug, Default)]
-pub struct Options {
-	pub getters: bool,
-	pub setters: bool,
-	pub counter: bool,
-	pub to_string: bool,
-	pub equals: bool,
-	pub documentation: bool,
-	pub warnings: bool,
-	pub fix: bool,
+#[derive(Debug, Clone, PartialEq, EnumString, EnumIter, Display)]
+pub enum Option {
+	Getters,
+	Setters,
+	ToString,
+	Docs,
+	Warnings,
+	Fix,
 }
 
 #[derive(Debug)]
 pub struct Command {
 	pub class_name: String,
 	pub attributes: Vec<Variable>,
-	pub options: Options,
+	pub options: Vec<Option>,
 	pub path: PathBuf,
 }
 
@@ -59,27 +59,13 @@ fn split_command(command: &str) -> (String, String, String) {
 	return (class_name, attributes, options);
 }
 
-fn parse_options(options: String) -> Result<Options, JavaMakerError> {
-	//split the string at each "--"
-	let options_vec: Vec<&str> = options.split("--").map(|s| s.trim()).collect();
-
-	let mut options = Options::default();
-
-	for o in &options_vec[1..] {
-		match *o {
-			"getters" => options.getters = true,
-			"setters" => options.setters = true,
-			"counter" => options.counter = true,
-			"to_string" => options.to_string = true,
-			"equals" => options.equals = true,
-			"docs" => options.documentation = true,
-			"warnings" => options.warnings = true,
-			"fix" => options.fix = true,
-			_ => return Err(JavaMakerError::UnknownOption(o.to_string())),
-		}
-	}
-
-	return Ok(options);
+fn parse_options(options: String) -> Result<Vec<Option>, JavaMakerError> {
+	options
+		.split("--")
+		.map(|s| s.trim().to_string().to_case(Case::UpperCamel))
+		.filter(|s| !s.is_empty())
+		.map(|o| Option::from_str(&o).map_err(|_| JavaMakerError::UnknownOption(o.to_string())))
+		.collect::<Result<Vec<_>, _>>()
 }
 
 fn parse_attributes(attributes: &str) -> Result<Vec<Variable>, JavaMakerError> {
@@ -167,6 +153,7 @@ pub fn parse_command(command: &str, path: &Path) -> Result<Command, JavaMakerErr
 		options,
 		path: path.to_path_buf(),
 	};
+
 	if command.warnings() {
 		warnings(&command);
 	}
@@ -179,35 +166,10 @@ pub fn parse_command(command: &str, path: &Path) -> Result<Command, JavaMakerErr
 
 #[allow(dead_code)]
 impl Command {
-	pub fn getters(&self) -> bool {
-		self.options.getters
-	}
-
-	pub fn setters(&self) -> bool {
-		self.options.setters
-	}
-
-	pub fn counter(&self) -> bool {
-		self.options.counter
-	}
-
-	pub fn to_string(&self) -> bool {
-		self.options.to_string
-	}
-
-	pub fn equals(&self) -> bool {
-		self.options.equals
-	}
-
-	pub fn documentation(&self) -> bool {
-		self.options.documentation
-	}
-
-	pub fn warnings(&self) -> bool {
-		self.options.warnings
-	}
-
-	pub fn fix(&self) -> bool {
-		self.options.fix
-	}
+	options!("getters");
+	options!("setters");
+	options!("to_string");
+	options!("docs");
+	options!("warnings");
+	options!("fix");
 }

@@ -2,6 +2,8 @@ use proc_macro::TokenStream;
 use quote::quote;
 // use syn;
 
+use convert_case::{Case, Casing};
+
 #[proc_macro]
 pub fn function(_input: TokenStream) -> TokenStream {
 	quote! {
@@ -30,6 +32,27 @@ pub fn function(_input: TokenStream) -> TokenStream {
 				}
 			}
 			return Cow::Owned(doc);
+		}
+	}
+	.into()
+}
+
+/// options!("getters") => pub fn getters(&self) -> bool { self.options.contains("getters") }
+/// TODO : do this for multiple options
+/// TODO : Or ever detect them from the Option enum
+#[proc_macro]
+pub fn options(input: TokenStream) -> TokenStream {
+	// convert to a string
+	let options = input.to_string();
+	// remove the quotes
+	let option_name = options[1..options.len() - 1].to_string();
+	let function_name = syn::parse_str::<syn::Ident>(&option_name).unwrap();
+	let option_variant_name = option_name.to_case(Case::UpperCamel);
+	let option_variant = syn::parse_str::<syn::Ident>(&option_variant_name).unwrap();
+
+	quote! {
+		pub fn #function_name(&self) -> bool {
+			self.options.contains(&Option::#option_variant)
 		}
 	}
 	.into()
