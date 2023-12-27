@@ -17,6 +17,6 @@ Available flags:
 --setters: generate getters for all fields that can be modified (Not static, nor final)
 --to_string: generate a toString method (Works only on primitive types and String)
 --docs: generate documentation for all fields and methods
---warnings: display warnings for case and convention
+--warnings: display warnings for cases and conventions
 --fix: fix warnings automatically
 ```
