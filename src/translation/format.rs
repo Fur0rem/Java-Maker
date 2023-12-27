@@ -1,6 +1,6 @@
 use crate::parser::Command;
-use crate::tokens::declaration::Declaration;
-use crate::tokens::expr_type::ExprType;
+use crate::tokens::Declaration;
+use crate::tokens::ExprType;
 use convert_case::{Case, Casing};
 use inline_colorization::{color_reset, color_yellow};
 
@@ -16,8 +16,7 @@ pub fn reformat_code(content: &mut String) {
 			for c in line.chars() {
 				if c == '{' {
 					count += 1;
-				}
-				else if c == '}' {
+				} else if c == '}' {
 					count -= 1;
 				}
 			}
@@ -71,8 +70,7 @@ pub fn warnings(command: &Command) {
 						name
 					);
 				}
-			}
-			else if name.starts_with("is") {
+			} else if name.starts_with("is") {
 				println!(
 					"{color_yellow}Warning:{color_reset} variable name {} should not start with \"is\"",
 					name

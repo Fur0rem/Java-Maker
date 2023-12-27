@@ -1,6 +1,4 @@
-use crate::tokens::{
-	declaration::Declaration, expr_type::ExprType, modifier::Modifier, visibility::Visibility,
-};
+use crate::tokens::{Declaration, ExprType, Modifier, Visibility};
 
 use super::class::Class;
 use java_maker_macros::function;

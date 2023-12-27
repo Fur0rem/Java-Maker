@@ -26,7 +26,7 @@ pub fn function(_input: TokenStream) -> TokenStream {
 				}
 			}
 			if let Some(expr_type) = self.expr_type() {
-				use crate::tokens::expr_type::ExprType;
+				use crate::tokens::ExprType;
 				if expr_type != ExprType::void() {
 					doc.push_str("\n\n@return ");
 				}

@@ -1,11 +1,11 @@
 use std::collections::HashSet;
 use std::io::prelude::*;
 
-use crate::higher_order::getter_setter::{getter::Getter, setter::Setter};
-use crate::higher_order::{class::Class, constructor::Constructor};
+use crate::higher_order::class::{Class, Constructor};
+use crate::higher_order::getter_setter::{Getter, Setter};
 use crate::parser::Command;
-use crate::tokens::declaration::Declaration;
-use crate::tokens::visibility::Visibility;
+use crate::tokens::Declaration;
+use crate::tokens::Visibility;
 use crate::translation::format::reformat_code;
 
 fn push_document(command: &Command, content: &mut String, document: &str) {
@@ -50,7 +50,7 @@ fn create_content(command: &Command) -> String {
 	}
 
 	if command.to_string() {
-		declarations.push(Box::new(crate::higher_order::to_string::ToString::new(
+		declarations.push(Box::new(crate::higher_order::utility::ToString::new(
 			&class,
 		)));
 	}

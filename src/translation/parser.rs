@@ -1,6 +1,6 @@
 use crate::translation::format::{fix, warnings};
 use crate::{
-	tokens::{expr_type::ExprType, modifier::Modifier, variable::Variable, visibility::Visibility},
+	tokens::{ExprType, Modifier, Variable, Visibility},
 	JavaMakerError,
 };
 use convert_case::{Case, Casing};
