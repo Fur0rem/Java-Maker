@@ -5,7 +5,6 @@ use convert_case::{Case, Casing};
 use inline_colorization::{color_reset, color_yellow};
 
 pub fn reformat_code(content: &mut String) {
-	//split at every \n
 	let lines: Vec<&str> = content.split('\n').collect();
 
 	//for each line, count how many more opening brackets than closing brackets there are
@@ -85,10 +84,14 @@ pub fn warnings(command: &Command) {
 
 pub fn fix(command: &mut Command) {
 	command.class_name = command.class_name.to_case(Case::Pascal);
+
 	for var in &mut command.attributes {
 		if let Some(expr_type) = var.expr_type() {
 			if expr_type == ExprType::boolean() && !var.name().unwrap().starts_with("is") {
 				var.update_name(&format!("is{}", var.name().unwrap()));
+			}
+			else if var.name().unwrap().starts_with("is") {
+				var.update_name(&var.name().unwrap()[2..]);
 			}
 		}
 		var.update_name(&var.name().unwrap().to_string().to_case(Case::Camel));
