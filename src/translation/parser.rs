@@ -114,7 +114,8 @@ fn parse_attributes(attributes: &str) -> Result<Vec<Variable>, JavaMakerError> {
 				return Err(JavaMakerError::UnknownVisibility(att[index..].to_string()));
 			}
 			Visibility::from_str(&att[index + 1..=end_index.unwrap()]).unwrap()
-		} else {
+		}
+		else {
 			Visibility::default()
 		};
 
@@ -166,10 +167,10 @@ pub fn parse_command(command: &str, path: &Path) -> Result<Command, JavaMakerErr
 
 #[allow(dead_code)]
 impl Command {
-	options!("getters");
-	options!("setters");
-	options!("to_string");
-	options!("docs");
-	options!("warnings");
-	options!("fix");
+	options!(getters);
+	options!(setters);
+	options!(to_string);
+	options!(docs);
+	options!(warnings);
+	options!(fix);
 }

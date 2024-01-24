@@ -1,4 +1,5 @@
 use std::borrow::Cow;
+use std::fmt::{self, Formatter};
 use strum_macros::{Display, EnumIter, EnumString};
 
 #[derive(Debug, Default, Clone, Copy, PartialEq, EnumString, EnumIter, Display)]
@@ -63,6 +64,14 @@ pub struct ExprType {
 	pub name: String,
 }
 
+macro_rules! primitive_type {
+	($name:ident) => {
+		pub fn $name() -> ExprType {
+			return ExprType::new(stringify!($name));
+		}
+	};
+}
+
 impl ExprType {
 	pub fn new(name: &str) -> Self {
 		ExprType {
@@ -70,41 +79,14 @@ impl ExprType {
 		}
 	}
 
-	pub fn int() -> Self {
-		return ExprType::new("int");
-	}
-
-	pub fn float() -> Self {
-		return ExprType::new("float");
-	}
-
-	pub fn double() -> Self {
-		return ExprType::new("double");
-	}
-
-	pub fn long() -> Self {
-		return ExprType::new("long");
-	}
-
-	pub fn short() -> Self {
-		return ExprType::new("short");
-	}
-
-	pub fn byte() -> Self {
-		return ExprType::new("byte");
-	}
-
-	pub fn char() -> Self {
-		return ExprType::new("char");
-	}
-
-	pub fn boolean() -> Self {
-		return ExprType::new("boolean");
-	}
-
-	pub fn void() -> Self {
-		return ExprType::new("void");
-	}
+	primitive_type!(double);
+	primitive_type!(float);
+	primitive_type!(long);
+	primitive_type!(int);
+	primitive_type!(short);
+	primitive_type!(byte);
+	primitive_type!(boolean);
+	primitive_type!(void);
 }
 
 impl Display for ExprType {
@@ -121,7 +103,8 @@ impl FromStr for ExprType {
 	}
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, EnumString, EnumIter, Display)]
+#[strum(serialize_all = "snake_case")]
 pub enum Keyword {
 	Static,
 	Final,
@@ -132,45 +115,6 @@ pub enum Keyword {
 	Native,
 	Strictfp,
 	Class,
-}
-
-impl Display for Keyword {
-	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		write!(
-			f,
-			"{}",
-			match self {
-				Keyword::Static => "static",
-				Keyword::Final => "final",
-				Keyword::Synchronized => "synchronized",
-				Keyword::Abstract => "abstract",
-				Keyword::Volatile => "volatile",
-				Keyword::Transient => "transient",
-				Keyword::Native => "native",
-				Keyword::Strictfp => "strictfp",
-				Keyword::Class => "class",
-			}
-		)
-	}
-}
-
-impl FromStr for Keyword {
-	type Err = ();
-
-	fn from_str(s: &str) -> Result<Self, Self::Err> {
-		match s {
-			"static" => Ok(Keyword::Static),
-			"final" => Ok(Keyword::Final),
-			"synchronized" => Ok(Keyword::Synchronized),
-			"abstract" => Ok(Keyword::Abstract),
-			"volatile" => Ok(Keyword::Volatile),
-			"transient" => Ok(Keyword::Transient),
-			"native" => Ok(Keyword::Native),
-			"strictfp" => Ok(Keyword::Strictfp),
-			"class" => Ok(Keyword::Class),
-			_ => Err(()),
-		}
-	}
 }
 
 #[derive(Debug, Clone)]
@@ -242,8 +186,6 @@ impl Modifier {
 		return Modifier::new(vis, extra_info);
 	}
 }
-
-use std::fmt::{self, Formatter};
 
 #[derive(Debug, Clone)]
 pub struct Variable {

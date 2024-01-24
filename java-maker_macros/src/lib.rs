@@ -1,6 +1,5 @@
 use proc_macro::TokenStream;
 use quote::quote;
-// use syn;
 
 use convert_case::{Case, Casing};
 
@@ -42,10 +41,7 @@ pub fn function(_input: TokenStream) -> TokenStream {
 /// TODO : Or ever detect them from the Option enum
 #[proc_macro]
 pub fn options(input: TokenStream) -> TokenStream {
-	// convert to a string
-	let options = input.to_string();
-	// remove the quotes
-	let option_name = options[1..options.len() - 1].to_string();
+	let option_name = input.to_string();
 	let function_name = syn::parse_str::<syn::Ident>(&option_name).unwrap();
 	let option_variant_name = option_name.to_case(Case::UpperCamel);
 	let option_variant = syn::parse_str::<syn::Ident>(&option_variant_name).unwrap();

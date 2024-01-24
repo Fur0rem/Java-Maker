@@ -16,7 +16,8 @@ pub fn reformat_code(content: &mut String) {
 			for c in line.chars() {
 				if c == '{' {
 					count += 1;
-				} else if c == '}' {
+				}
+				else if c == '}' {
 					count -= 1;
 				}
 			}
@@ -47,33 +48,35 @@ pub fn reformat_code(content: &mut String) {
 	}
 }
 
-pub fn warnings(command: &Command) {
-	if command.class_name.chars().next().unwrap().is_lowercase() {
+macro_rules! warn{
+	($($arg:tt)*) => {
 		println!(
-			"{color_yellow}Warning:{color_reset} class name {} should start with an uppercase letter",
-			command.class_name
+			"{color_yellow}Warning:{color_reset} {}",
+			format!($($arg)*)
 		);
+	};
+}
+
+pub fn warnings(command: &Command) {
+	let class_name = &command.class_name;
+	if class_name.chars().next().unwrap().is_lowercase() {
+		warn!("class name {class_name} should start with an uppercase letter",);
 	}
+
 	for var in &command.attributes {
 		let name = var.name().unwrap();
 		if name.chars().next().unwrap().is_uppercase() {
-			println!(
-				"{color_yellow}Warning:{color_reset} variable name {} should start with a lowercase letter",
-				name
-			);
+			warn!("variable name {name} should start with a lowercase letter",);
 		}
 		if let Some(expr_type) = var.expr_type() {
 			if expr_type == ExprType::boolean() {
 				if !name.starts_with("is") {
-					println!(
-						"{color_yellow}Warning:{color_reset} boolean variable name {} should start with \"is\"",
-						name
-					);
+					warn!("variable name {name} should start with \"is\" because it is a boolean",);
 				}
-			} else if name.starts_with("is") {
-				println!(
-					"{color_yellow}Warning:{color_reset} variable name {} should not start with \"is\"",
-					name
+			}
+			else if name.starts_with("is") {
+				warn!(
+					"variable name {name} should not start with \"is\" because it is not a boolean",
 				);
 			}
 		}
