@@ -91,7 +91,8 @@ pub fn fix(command: &mut Command) {
 				var.update_name(&format!("is{}", var.name().unwrap()));
 			}
 			else if var.name().unwrap().starts_with("is") {
-				var.update_name(&var.name().unwrap()[2..]);
+				let new_name = var.name().unwrap().strip_prefix("is").unwrap().to_string();
+				var.update_name(&new_name);
 			}
 		}
 		var.update_name(&var.name().unwrap().to_string().to_case(Case::Camel));
